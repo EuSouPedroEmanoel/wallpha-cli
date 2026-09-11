@@ -188,7 +188,9 @@ elif [ "$PM" = "apt" ]; then
     # extra-cmake-modules para build do plasmóide (só build, pode remover depois)
     if dpkg -l "extra-cmake-modules" 2>/dev/null | grep -q "^ii"; then ok "extra-cmake-modules"; else no "extra-cmake-modules"; install_pkg "extra-cmake-modules" || true; fi
 elif [ "$PM" = "dnf" ]; then
-    for pkg in qt6-qtmultimedia qt6-qtmultimedia-devel kf6-plasma; do
+    # Fedora empacota o framework Plasma como libplasma; ele fornece
+    # kf6-plasma e o módulo QML org.kde.plasma.plasmoid.
+    for pkg in qt6-qtmultimedia qt6-qtmultimedia-devel libplasma; do
         if rpm -q "$pkg" >/dev/null 2>&1; then ok "$pkg"; else no "$pkg"; install_pkg "$pkg" || true; fi
     done
     if rpm -q "extra-cmake-modules" >/dev/null 2>&1; then ok "extra-cmake-modules"; else no "extra-cmake-modules"; install_pkg "extra-cmake-modules" || true; fi
